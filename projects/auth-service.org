@@ -1,0 +1,53 @@
+#+TITLE: Auth Service
+
+Single service that fulfills authorization and authentication responsibilities.
+
+
+
+* Database
+
+#+BEGIN_SRC plantuml
+@startuml
+
+entity user_identity {
+    email
+    password
+}
+
+entity token_blacklist {
+    token: text
+}
+
+@enduml
+
+#+END_SRC
+
+#+RESULTS:
+[[file:/tmp/babel-pqkiIN/plantuml-cbndDU.png]]
+* Scope and Requirements
+
+- Cookie based transactions between a client and distributed backend services.
+- access token that can authenticate and authorize requests sent to resources and other exposed services under the umbrella of the business
+- resources that accept auth tokens should not be required to call into the auth granting service to authorize a client's request
+  + shared key used to validate tokens between resources
+- a mechanism for revoking an access token, stopping it's usage
+  + black listed tokens must be shared to other resources that use auth services, such that they know not to accept a blacklisted token.
+  + a message queing system could be a solution to sharing blacklisted tokens with other services while not requiring that other resources constantly must call the auth service.
+  + when blacklisted tokens expire, they should be deleted from the blacklist
+- ideally, the black list mechanism should not require that a service make a database request in order to service every client request that requires authentication.
+  + we should only be checking a blacklist if the token is not expired.
+
+
+JWT ID claim: use a unique identifier for a jwt, allows blacklisting without saving the actual jwt anywhere.
+
+* Token Flow
+
+#+BEGIN_SRC plantuml
+@startuml
+
+@enduml
+
+#+END_SRC
+
+#+RESULTS:
+[[file:/tmp/babel-pqkiIN/plantuml-TE8F8x.png]]

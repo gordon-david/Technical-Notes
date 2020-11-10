@@ -1,0 +1,38 @@
+#+TITLE: Workout Tracker
+
+
+* Database
+
+#+BEGIN_SRC plantuml
+@startuml
+entity lift_name {
+    name: text
+}
+
+entity user_identity {
+    email: text
+    username: text
+}
+
+entity lift {
+    name: <<FK lift_name>>
+    user: <<FK user_identity>>
+    sets: int
+    reps: int
+    date: date
+}
+
+lift }|--|| lift_name
+lift }o--|| user_identity
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:/tmp/babel-pqkiIN/plantuml-e0Lh98.png]]
+* Workout API
+
+GET /api/lift?<name>&<user_email>
+- if lift name is sent without a user_email, send public versions of lift entities, without user information.
+- if lift name is set with a user_email, send users
+
+POST /api/lift
